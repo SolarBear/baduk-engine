@@ -1,7 +1,8 @@
 # Baduk library 
 
-Forked from beldur/libaduk
+[![Build Status](https://travis-ci.org/ami-go/baduk-engine.svg?branch=master)](https://travis-ci.org/ami-go/baduk-engine)
 
-[![Build Status](https://drone.io/github.com/Beldur/libaduk/status.png)](https://drone.io/github.com/Beldur/libaduk/latest)
+
+Forked from beldur/libaduk
 
 A Baduk library written in Golang
