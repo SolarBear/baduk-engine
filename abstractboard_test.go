@@ -134,7 +134,7 @@ func TestPlayAndCaptureAndUndo(t *testing.T) {
 func TestPlayFirstBlack(t *testing.T) {
 	board, err := NewBoard(19)
 	if err != nil {
-		t.Error("Failed: %v", err)
+		t.Errorf("Failed: %v", err)
 	}
 	board.Play(4, 4, BLACK)
 	board.ToString()
@@ -144,7 +144,7 @@ func TestPlayFirstBlack(t *testing.T) {
 func TestReplay(t *testing.T) {
 	board, err := NewBoard(19)
 	if err != nil {
-		t.Error("Failed: %v", err)
+		t.Errorf("Failed: %v", err)
 	}
 	board.Play(4, 4, BLACK)
 	board.Play(5, 4, BLACK)
