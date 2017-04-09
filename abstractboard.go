@@ -8,7 +8,7 @@ import (
 // Represents a Go board data structure
 type AbstractBoard struct {
 	BoardSize uint8
-	data      []BoardStatus
+	data      [][]BoardStatus
 	undoStack []*Move
 	zobrist   *ZobristHash
 }
@@ -19,16 +19,17 @@ func NewBoard(boardSize uint8) (*AbstractBoard, error) {
 		return nil, fmt.Errorf("Boardsize can not be less than 1!")
 	}
 
+	board := make([][]BoardStatus, boardSize)
+	for i := uint8(0); i < boardSize; i++ {
+		board[i] = make([]BoardStatus, boardSize)
+	}
+
 	return &AbstractBoard{
 		boardSize,
-		make([]BoardStatus, boardSize*boardSize),
+		board,
 		make([]*Move, 0),
 		NewZobristHash(boardSize),
 	}, nil
-}
-
-func (board *AbstractBoard) Len() int {
-	return len(board.data)
 }
 
 //Verify if a given position is within the boundaries of the board
@@ -63,7 +64,9 @@ func (board *AbstractBoard) ToString() string {
 // Clears the board
 func (board *AbstractBoard) Clear() {
 	for i := 0; i < len(board.data); i++ {
-		board.data[i] = EMPTY
+		for j := 0; j < len(board.data[i]); j++ {
+			board.data[i][j] = EMPTY
+		}
 	}
 	board.zobrist.hash = 0
 	board.undoStack = []*Move{}
@@ -126,7 +129,7 @@ func (board *AbstractBoard) PlayMove(move Move) error {
 }
 
 // Play stone at given position
-func (board *AbstractBoard) Play(x uint8, y uint8, color BoardStatus) error {
+func (board *AbstractBoard) Play(x, y uint8, color BoardStatus) error {
 	log.Printf("Play: X: %v, Y: %v, Color: %v", x, y, color)
 
 	// Is move on the board?
@@ -158,7 +161,7 @@ func (board *AbstractBoard) Play(x uint8, y uint8, color BoardStatus) error {
 }
 
 // Checks if move is legal and returns captured stones if necessary
-func (board *AbstractBoard) legal(x uint8, y uint8, color BoardStatus) (captures []Position, err error) {
+func (board *AbstractBoard) legal(x, y uint8, color BoardStatus) (captures []Position, err error) {
 	captures = []Position{}
 	neighbours := board.getNeighbours(x, y)
 
@@ -272,7 +275,7 @@ func (board *AbstractBoard) getNoLibertyStones(x uint8, y uint8, orgPosition Pos
 }
 
 // Returns the neighbour array positions for a given point
-func (board *AbstractBoard) getNeighbours(x uint8, y uint8) (neighbourIndexes []Position) {
+func (board *AbstractBoard) getNeighbours(x, y uint8) (neighbourIndexes []Position) {
 	neighbourIndexes = []Position{}
 	possibleNeighbours := [...]Position{
 		Position{(x - 1), y},
@@ -286,13 +289,15 @@ func (board *AbstractBoard) getNeighbours(x uint8, y uint8) (neighbourIndexes []
 			neighbourIndexes = append(neighbourIndexes, position)
 		}
 	}
-	return
+	return neighbourIndexes
 }
 
-func (board *AbstractBoard) getStatus(x uint8, y uint8) BoardStatus {
-	return board.data[board.BoardSize*x+y]
+func (board *AbstractBoard) getStatus(x, y uint8) BoardStatus {
+
+	return board.data[x][y]
 }
 
 func (board *AbstractBoard) setStatus(x uint8, y uint8, status BoardStatus) {
-	board.data[board.BoardSize*x+y] = status
+
+	board.data[x][y] = status
 }

@@ -129,3 +129,24 @@ func TestPlayAndCaptureAndUndo(t *testing.T) {
 		t.Errorf("Undo should have recovered old board position!")
 	}
 }
+
+// Test can play and print the board
+func TestPlayFirstBlack(t *testing.T) {
+	board, err := NewBoard(19)
+	if err != nil {
+		t.Error("Failed: %v", err)
+	}
+	board.Play(4, 4, BLACK)
+	board.ToString()
+}
+
+// Test a player tries to repeat plays
+func TestReplay(t *testing.T) {
+	board, err := NewBoard(19)
+	if err != nil {
+		t.Error("Failed: %v", err)
+	}
+	board.Play(4, 4, BLACK)
+	board.Play(5, 4, BLACK)
+	board.ToString()
+}
