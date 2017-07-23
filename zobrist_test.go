@@ -18,3 +18,16 @@ func TestBasicZobristHash(t *testing.T) {
 		t.Errorf("The second hash (%d) should be equal to the first (%d)", hashOne, hashTwo)
 	}
 }
+
+// Check all coordinates are hashable
+func TestZobrisHashBoundaries(t *testing.T) {
+	const size = 19
+	zob := NewZobristHash(size)
+
+	for i := uint8(0); i < size; i++ {
+		for j := uint8(0); j < size; j++ {
+			zob.Hash(i, j, BLACK)
+			zob.Hash(i, j, WHITE)
+		}
+	}
+}

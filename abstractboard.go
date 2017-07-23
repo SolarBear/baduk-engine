@@ -14,18 +14,18 @@ type AbstractBoard struct {
 }
 
 // Creates new Go Board
-func NewBoard(boardSize uint8) (*AbstractBoard, error) {
+func NewBoard(boardSize uint16) (*AbstractBoard, error) {
 	if boardSize < 1 {
 		return nil, fmt.Errorf("Boardsize can not be less than 1!")
 	}
 
 	board := make([][]BoardStatus, boardSize)
-	for i := uint8(0); i < boardSize; i++ {
+	for i := uint8(0); i < uint8(boardSize); i++ {
 		board[i] = make([]BoardStatus, boardSize)
 	}
 
 	return &AbstractBoard{
-		boardSize,
+		uint8(boardSize),
 		board,
 		make([]*Move, 0),
 		NewZobristHash(boardSize),
@@ -293,11 +293,9 @@ func (board *AbstractBoard) getNeighbours(x, y uint8) (neighbourIndexes []Positi
 }
 
 func (board *AbstractBoard) getStatus(x, y uint8) BoardStatus {
-
 	return board.data[x][y]
 }
 
 func (board *AbstractBoard) setStatus(x uint8, y uint8, status BoardStatus) {
-
 	board.data[x][y] = status
 }
